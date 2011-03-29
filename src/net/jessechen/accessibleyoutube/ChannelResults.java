@@ -1,0 +1,147 @@
+package net.jessechen.accessibleyoutube;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+public class ChannelResults extends Activity {
+	private NodeList nl;
+	private String query;
+	private Bundle b;
+	private ArrayList<ListItem> results;
+	private mAdapter m_adapter;
+	private ListView lv;
+	private HashMap<String, SearchResult> h;
+	private TextView tv;
+	
+    /** Called when the activity is first created. */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        setContentView(R.layout.channelresults);
+        
+    	query = (String) getIntent().getCharSequenceExtra("query");
+        
+        results = new ArrayList<ListItem>();
+        
+        m_adapter = new mAdapter(getApplicationContext(), R.layout.list_item, results);
+        lv = (ListView) findViewById(R.id.ChannelList);
+        
+        h = new HashMap<String, SearchResult>();
+        
+        tv = (TextView) findViewById(R.id.ChannelResultsTitle);
+        
+	    getResults();
+	    
+        lv.setOnItemClickListener(new OnItemClickListener() {
+        	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        		SearchResult l = h.get(((TextView) view.findViewById(R.id.listitem)).getText());
+        		Intent i = new Intent(ChannelResults.this, Result.class);
+        		i.putExtra("videotitle", l.getTitle());
+        		i.putExtra("videourl", l.getVideoUrl());
+        		i.putExtra("thumbnailurl", l.getThumbnailUrl());
+        		i.putExtra("description", l.getDescription());
+        		i.putExtra("username", l.getUsername());
+        		startActivity(i);
+        	}
+        }); 
+        lv.setAdapter(m_adapter); 
+    }
+    
+	private void getResults() {
+        try {
+			URL url = new URL("http://gdata.youtube.com/feeds/api/channels?q=" + query + "&v=2");;
+			String encodedQuery = URLEncoder.encode(query);
+			tv.setText("Channel Results for \"" + encodedQuery + "\"");
+			
+        	URLConnection connection = url.openConnection();
+        	
+        	HttpURLConnection httpConnection = (HttpURLConnection) connection;
+        	
+        	int responseCode = httpConnection.getResponseCode();
+        	
+        	if (responseCode == HttpURLConnection.HTTP_OK); {
+        		InputStream in = httpConnection.getInputStream();
+        		
+        		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        		DocumentBuilder db = dbf.newDocumentBuilder();
+        		
+        		Document dom = db.parse(in);
+        		Element docEle = dom.getDocumentElement();
+        		
+        		nl = docEle.getElementsByTagName("entry");
+        		if (nl != null && nl.getLength() > 0) {
+        			for (int i = 0; i < nl.getLength(); i++) {
+        				Element entry = (Element) nl.item(i);
+        				Element title = (Element) entry.getElementsByTagName("title").item(0);
+        				
+        				String titleString = title.getFirstChild().getNodeValue();
+        				SearchResult sr = new SearchResult(titleString, null); // custom class to store YouTube links
+        				h.put(titleString, sr); // store in a HashMap to look up later
+        				results.add(new ListItem(titleString, sr.getVideoUrl(), null)); // only add title to the ArrayList
+        			}
+        		}
+        	}
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+	}	
+
+    protected class mAdapter extends ArrayAdapter<ListItem> {
+    	private ArrayList<ListItem> items;
+    	
+    	public mAdapter(Context context, int textViewResourceId, ArrayList<ListItem> items) {
+    		super(context, textViewResourceId, items);
+    		this.items = items;
+    	}
+    	
+    	@Override
+    	public View getView(int position, View convertView, ViewGroup parent) {
+    		View v = convertView;
+    		if (v == null) {
+    			LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    			v = vi.inflate(R.layout.list_item, null);
+    		}
+    		final ListItem l = items.get(position);
+    		if (l != null) {
+    			TextView t = (TextView) v.findViewById(R.id.listitem);
+    			
+				t.setText(l.getTitle());
+			}
+    		return v;
+    	}
+    }
+    
+	protected static Object fetch(String address) throws IOException, MalformedURLException {
+		URL url = new URL(address);
+		Object content = url.getContent();
+		return content;
+	}
+}

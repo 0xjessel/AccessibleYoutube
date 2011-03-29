@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Accessible Youtube</string>
+	<string name="QueryHint">Enter search query here</string>
+	<string name="ChannelHint">Enter channel search here</string>
+	<string name="ShareText">Share YouTube URL</string>
+	<string name="descriptitle">Description</string>
+	<string name="RatingTitle">Rate the quality of captions!</string>
+</resources>

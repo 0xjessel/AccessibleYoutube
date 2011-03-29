@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<TextView 
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:text="@string/app_name"
+		android:paddingBottom="75sp"
+		android:gravity="center_horizontal"
+		android:textSize="40sp" />
+		
+	<EditText 
+		android:hint="@string/QueryHint" 
+		android:layout_height="70sp" 
+		android:id="@+id/QueryText" 
+		android:layout_width="fill_parent"
+		android:layout_gravity="center"/>
+	
+	<EditText 
+		android:hint="@string/ChannelHint" 
+		android:layout_height="70sp" 
+		android:id="@+id/ChannelText" 
+		android:layout_width="fill_parent"
+		android:layout_gravity="center">
+	</EditText>
+
+</LinearLayout>
