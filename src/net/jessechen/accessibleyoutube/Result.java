@@ -17,23 +17,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Result extends Activity {
-	
-    /** Called when the activity is first created. */
-    @SuppressWarnings("unused")
-	@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        
-        setContentView(R.layout.result);
-  
-		try {
-			String thumbnailUrl = getIntent().getExtras().getString("thumbnailurl");
-			final String username = getIntent().getExtras().getString("username");
-			String titleString = getIntent().getExtras().getString("videotitle");
-			final String videoURL = getIntent().getExtras().getString("videourl");
-			String description = getIntent().getExtras().getString("description");
 
-			TextView title = (TextView) findViewById(R.id.ResultTitle);
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		setContentView(R.layout.result);
+
+		try {
+			String thumbnailUrl = getIntent().getExtras().getString(
+					"thumbnailurl");
+			final String username = getIntent().getExtras().getString(
+					"username");
+			String titleString = getIntent().getExtras()
+					.getString("videotitle");
+			final String videoURL = getIntent().getExtras().getString(
+					"videourl");
+			String description = getIntent().getExtras().getString(
+					"description");
+
+			TextView title = (TextView) findViewById(R.id.resulttitle);
 			title.setText(titleString);
 
 			ImageView image = (ImageView) findViewById(R.id.thumbnail);
@@ -57,15 +61,17 @@ public class Result extends Activity {
 				}
 			});
 
-			TextView descripTitle = (TextView) findViewById(R.id.descriptitle);
 			TextView descripText = (TextView) findViewById(R.id.description);
 			descripText.setText(description);
 
-			TextView ratingTitle = (TextView) findViewById(R.id.ratingtitle);
 			final RatingBar ratingbar = (RatingBar) findViewById(R.id.ratingbar);
-			ratingbar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
-						public void onRatingChanged(RatingBar ratingBar,float rating, boolean fromUser) {
-							Toast.makeText(Result.this, "New Rating: " + rating, Toast.LENGTH_SHORT).show();
+			ratingbar
+					.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
+						public void onRatingChanged(RatingBar ratingBar,
+								float rating, boolean fromUser) {
+							Toast.makeText(Result.this,
+									"New Rating: " + rating, Toast.LENGTH_SHORT)
+									.show();
 						}
 					});
 

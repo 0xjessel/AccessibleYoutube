@@ -11,7 +11,7 @@
 		android:layout_height="fill_parent"
 		android:orientation="vertical">
 		<TextView
-			android:id="@+id/ResultTitle"
+			android:id="@+id/resulttitle"
 			android:layout_width="fill_parent" 
 			android:layout_height="wrap_content"
 			android:gravity="center_horizontal"
@@ -20,7 +20,7 @@
 			/>
         <ImageView
         	android:id="@+id/thumbnail"
-        	android:layout_below="@id/ResultTitle"
+        	android:layout_below="@id/resulttitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10sp"
@@ -28,7 +28,7 @@
             />               			
 		<Button
 			android:id="@+id/userchannel"
-			android:layout_below="@id/ResultTitle"
+			android:layout_below="@id/resulttitle"
         	android:layout_toRightOf="@id/thumbnail"
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
 			android:textSize="20sp" 
 			android:textStyle="bold"
 			android:padding="5sp"
-			android:text="@string/RatingTitle"
+			android:text="@string/ratingtitle"
 			/>	
 		<RatingBar 
 			android:id="@+id/ratingbar"
@@ -80,7 +80,7 @@
         	android:layout_below="@id/ratingbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/ShareText"
+            android:text="@string/sharetext"
             android:textSize="20sp"
             />			
 	</RelativeLayout>
