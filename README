@@ -7,15 +7,12 @@ Last Call for Google I/O 2011 - Accessibility Round 2
 Accessibility Meets Android
 
 Build an Android application that can do ALL of the following: 
-   * Search for captioned videos on YouTube (mobile videos available in the
-Android YouTube Player)
+   * Search for captioned videos on YouTube (mobile videos available in the Android YouTube Player)
    * Link to the YouTube Player on Android to play a selected video
    * Rate the quality of the captions in a way that is visible to users of the App
-   * Rate a YouTube channel by caption friendliness: % of videos with captions, 
-overall quality score for captions on their channel
+   * Rate a YouTube channel by caption friendliness: % of videos with captions, overall quality score for captions on their channel
    * Share a captioned video link with a friend.  
-   * The application must be usable eyes-free when TalkBack is enabled in the 
-Accessibility settings.
+   * The application must be usable eyes-free when TalkBack is enabled in the Accessibility settings.
    
 More details can be found on the wiki, https://github.com/meltedxice/AccessibleYoutube/wiki.
    		
