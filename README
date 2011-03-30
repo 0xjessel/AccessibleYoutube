@@ -17,45 +17,5 @@ overall quality score for captions on their channel
    * The application must be usable eyes-free when TalkBack is enabled in the 
 Accessibility settings.
    
-I was not able to fully satisfy all the requirements by the deadline.  The first
-commit is the submission I sent to Google.  I plan on completing it and touching
-it up some more out of personal interest.  
-
-Comments: 
-   * Search for captioned videos on YouTube (mobile videos available in the
-   Android YouTube Player)
-	- I successfully completed this, however, I need to create a new Runnable
-        for downloading the output feed.  As of now, it is run on the UI thread, so 
-        it lags a bit when it is downloading.  	
-
-   * Link to the YouTube Player on Android to play a selected video
-	- I successfully completed this, if the user taps on the thumbnail in the 
-        search result, it will automatically start the YouTube player.  Otherwise, 
-        clicking on the list item will go to a detailed page about the video where
-        user can view title, thumbnail, more videos from that user (that has captions 
-        only), description, rating, and share.
-
-   * Rate the quality of the captions in a way that is visible to users of the App
-	- I implemented a ratingbar widget for each video.  As of now, it only creates
-        a Toast of the rating. I did not fully understand what they wanted, so I left it 
-        as is. Perhaps eventually it can pull ratings from other users to generate an 
-        user-generated rating for each video.
-
-   * Rate a YouTube channel by caption friendliness: % of videos with captions, 
-     overall quality score for captions on their channel
-	- I was not able to get to this, I managed to create a new EditText on the 
-        main screen for channel searching.  It returns channel results, but nothing 
-        beyond that.  Given more time, I would have a similar detailed page for each 
-        channel where it would show the % of videos with captions (videos with 
-        captions/all videos), and some sort of rating system for each channel.
-
-   * Share a captioned video link with a friend. 
-	- Successfully completed, on each detailed page of each video there is a 
-        share YouTube URL button on the bottom that sends the Url to the sharing 
-        intent for user to choose how they want to share the URL. 
-
-   * The application must be usable eyes-free when TalkBack is enabled in the 
-     Accessibility settings.
-	- Ensured each widget had meaningful textual labels, tested with my Android 
-        smartphone and my app seems to be usable. 
+More details can be found on the wiki, https://github.com/meltedxice/AccessibleYoutube/wiki.
    		
