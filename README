@@ -2,7 +2,9 @@ Jesse Chen
 jesse.chen@berkeley.edu
 www.jessechen.net
 
-Last Call for Google I/O 2011 - Accessibility Round 2
+Winner of the Last Call for Google I/O 2011 - Accessibility Round 2
+
+Master branch is the source code that I submitted for the contest.  See the continued branch to view updates to this app since my submission.  
 
 Accessibility Meets Android
 
@@ -14,5 +16,4 @@ Build an Android application that can do ALL of the following:
    * Share a captioned video link with a friend.  
    * The application must be usable eyes-free when TalkBack is enabled in the Accessibility settings.
    
-More details can be found on the wiki, https://github.com/meltedxice/AccessibleYoutube/wiki.
-   		
+More details can be found on the wiki: https://github.com/meltedxice/AccessibleYoutube/wiki.
