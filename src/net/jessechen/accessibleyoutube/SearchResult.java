@@ -1,7 +1,7 @@
 package net.jessechen.accessibleyoutube;
 
 public class SearchResult {
-	private String title, videoURL, thumbnailUrl, description, username;
+	private String title, videoURL, thumbnailUrl, description, username, summary, feedURL;
 
 	public SearchResult(String titleString, String id, String thumbnailUrl,
 			String description, String username) {
@@ -12,9 +12,10 @@ public class SearchResult {
 		this.username = username;
 	}
 
-	public SearchResult(String titleString, String thumbnailUrl2) {
+	public SearchResult(String titleString, String summ, String feed) {
 		title = titleString;
-		this.thumbnailUrl = thumbnailUrl2;
+		summary = summ;
+		feedURL = feed;
 	}
 
 	public String getTitle() {
@@ -35,5 +36,13 @@ public class SearchResult {
 
 	public String getUsername() {
 		return username;
+	}
+	
+	public String getSummary() {
+		return summary;
+	}
+	
+	public String getFeedUrl() {
+		return feedURL;
 	}
 }

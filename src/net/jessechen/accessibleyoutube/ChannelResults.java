@@ -99,9 +99,7 @@ public class ChannelResults extends Activity {
 
 			int responseCode = httpConnection.getResponseCode();
 
-			if (responseCode == HttpURLConnection.HTTP_OK)
-				;
-			{
+			if (responseCode == HttpURLConnection.HTTP_OK) {
 				InputStream in = httpConnection.getInputStream();
 
 				DocumentBuilderFactory dbf = DocumentBuilderFactory
@@ -117,13 +115,16 @@ public class ChannelResults extends Activity {
 						Element entry = (Element) nl.item(i);
 						Element title = (Element) entry.getElementsByTagName(
 								"title").item(0);
-
+						Element summary = (Element) entry.getElementsByTagName("summary").item(0);
+						Element feedLink = (Element) entry.getElementsByTagName("gd:feedlink").item(0);
+						
+						String summaryString = summary.getFirstChild().getNodeValue();
+						String feedUrl = feedLink.getAttribute("href");
 						String titleString = title.getFirstChild()
 								.getNodeValue();
-						SearchResult sr = new SearchResult(titleString, null);
+						SearchResult sr = new SearchResult(titleString, summaryString, feedUrl);
 						h.put(titleString, sr); // store for lookup
-						results.add(new ListItem(titleString, sr.getVideoUrl(),
-								null));
+						results.add(new ListItem(titleString, null, null));
 					}
 				}
 			}
@@ -137,15 +138,12 @@ public class ChannelResults extends Activity {
 				SearchResult l = h.get(((TextView) view
 						.findViewById(R.id.listitem)).getText());
 				Intent i = new Intent(ChannelResults.this, Result.class);
-				i.putExtra("videotitle", l.getTitle());
-				i.putExtra("videourl", l.getVideoUrl());
-				i.putExtra("thumbnailurl", l.getThumbnailUrl());
-				i.putExtra("description", l.getDescription());
-				i.putExtra("username", l.getUsername());
+				i.putExtra("channeltitle", l.getTitle());
+				i.putExtra("channelsummary", l.getSummary());
+				i.putExtra("feedurl", l.getFeedUrl());
 				startActivity(i);
 			}
 		});
-
 		runOnUiThread(returnRes);
 	}
 
