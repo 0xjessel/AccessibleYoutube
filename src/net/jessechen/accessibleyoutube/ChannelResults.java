@@ -11,10 +11,8 @@
  ******************************************************************************/
 package net.jessechen.accessibleyoutube;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -47,7 +45,7 @@ public class ChannelResults extends Activity {
 	private String query;
 	private ArrayList<ListItem> results;
 	private ListView lv;
-	private HashMap<String, SearchResult> h;
+	private HashMap<String, YoutubeResult> h;
 	private TextView tv;
 	private mAdapter m_adapter;
 	private Runnable searchResults;
@@ -68,7 +66,7 @@ public class ChannelResults extends Activity {
 		lv = (ListView) findViewById(R.id.channellist);
 		lv.setAdapter(m_adapter);
 
-		h = new HashMap<String, SearchResult>();
+		h = new HashMap<String, YoutubeResult>();
 
 		tv = (TextView) findViewById(R.id.channelresultstitle);
 
@@ -133,7 +131,7 @@ public class ChannelResults extends Activity {
 						String feedUrl = feedLink.getAttribute("href");
 						String titleString = title.getFirstChild()
 								.getNodeValue();
-						SearchResult sr = new SearchResult(titleString, summaryString, feedUrl);
+						YoutubeResult sr = new YoutubeResult(titleString, summaryString, feedUrl);
 						h.put(titleString, sr); // store for lookup
 						results.add(new ListItem(titleString, null, null));
 					}
@@ -146,8 +144,8 @@ public class ChannelResults extends Activity {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				SearchResult l = h.get(((TextView) view
-						.findViewById(R.id.listitem)).getText());
+				YoutubeResult l = h.get(((TextView) view
+						.findViewById(R.id.text)).getText());
 				Intent i = new Intent(ChannelResults.this, Result.class);
 				i.putExtra("channeltitle", l.getTitle());
 				i.putExtra("channelsummary", l.getSummary());
@@ -158,7 +156,7 @@ public class ChannelResults extends Activity {
 		runOnUiThread(returnRes);
 	}
 
-	protected class mAdapter extends ArrayAdapter<ListItem> {
+	private class mAdapter extends ArrayAdapter<ListItem> {
 		private ArrayList<ListItem> items;
 
 		public mAdapter(Context context, int textViewResourceId,
@@ -176,18 +174,11 @@ public class ChannelResults extends Activity {
 			}
 			final ListItem l = items.get(position);
 			if (l != null) {
-				TextView t = (TextView) v.findViewById(R.id.listitem);
+				TextView t = (TextView) v.findViewById(R.id.text);
 
 				t.setText(l.getTitle());
 			}
 			return v;
 		}
-	}
-
-	protected static Object fetch(String address) throws IOException,
-			MalformedURLException {
-		URL url = new URL(address);
-		Object content = url.getContent();
-		return content;
 	}
 }

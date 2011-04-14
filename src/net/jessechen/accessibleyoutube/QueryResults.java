@@ -11,10 +11,8 @@
  ******************************************************************************/
 package net.jessechen.accessibleyoutube;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -23,6 +21,8 @@ import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import net.jessechen.accessibleyoutube.AsyncImageLoader.ImageCallback;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -33,11 +33,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -50,7 +48,7 @@ public class QueryResults extends Activity {
 
 	private static NodeList nl;
 	private ListView lv;
-	private HashMap<String, SearchResult> h;
+	private HashMap<String, YoutubeResult> h;
 	private String query;
 	private TextView tv;
 	private ArrayList<ListItem> results;
@@ -72,7 +70,7 @@ public class QueryResults extends Activity {
 		lv = (ListView) findViewById(R.id.list);
 		lv.setAdapter(m_adapter);
 
-		h = new HashMap<String, SearchResult>();
+		h = new HashMap<String, YoutubeResult>();
 
 		tv = (TextView) findViewById(R.id.resultstitle);
 
@@ -91,7 +89,6 @@ public class QueryResults extends Activity {
 	}
 
 	private Runnable returnRes = new Runnable() {
-
 		@Override
 		public void run() {
 			if (results != null && results.size() > 0) {
@@ -167,7 +164,7 @@ public class QueryResults extends Activity {
 												// entry->id
 						String titleString = title.getFirstChild()
 								.getNodeValue();
-						SearchResult sr = new SearchResult(titleString,
+						YoutubeResult sr = new YoutubeResult(titleString,
 								videoId, thumbnailUrl, description, channelName);
 						h.put(titleString, sr); // store in HashMap for look up
 						results.add(new ListItem(titleString, sr.getVideoUrl(),
@@ -189,8 +186,8 @@ public class QueryResults extends Activity {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				SearchResult l = h.get(((TextView) view
-						.findViewById(R.id.listitem)).getText());
+				YoutubeResult l = h.get(((TextView) view
+						.findViewById(R.id.text)).getText());
 				Intent i = new Intent(QueryResults.this, Result.class);
 				i.putExtra("videotitle", l.getTitle());
 				i.putExtra("videourl", l.getVideoUrl());
@@ -203,50 +200,58 @@ public class QueryResults extends Activity {
 		runOnUiThread(returnRes);
 	}
 
-	protected static Object fetch(String address) throws IOException,
-			MalformedURLException {
-		URL url = new URL(address);
-		Object content = url.getContent();
-		return content;
-	}
-
+	/**
+	 * Custom ArrayAdapter that loads thumbnails in a separate thread, reuse
+	 * rows in the list, and caching child views within a row.
+	 * 
+	 * Credits go to this article:
+	 * http://blog.jteam.nl/2009/09/17/exploring-the-world-of-android-part-2/
+	 * 
+	 * @author Jesse Chen
+	 * 
+	 */
 	private class mAdapter extends ArrayAdapter<ListItem> {
 		private ArrayList<ListItem> items;
+		private AsyncImageLoader asyncImageLoader;
 
 		public mAdapter(Context context, int textViewResourceId,
 				ArrayList<ListItem> items) {
 			super(context, textViewResourceId, items);
 			this.items = items;
+			asyncImageLoader = new AsyncImageLoader();
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v = convertView;
+			ViewCache viewCache;
+
 			if (v == null) {
 				LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				v = vi.inflate(R.layout.list_item, null);
+				viewCache = new ViewCache(v);
+				v.setTag(viewCache);
+			} else {
+				viewCache = (ViewCache) v.getTag();
 			}
+
 			final ListItem l = items.get(position);
 			if (l != null) {
-				TextView t = (TextView) v.findViewById(R.id.listitem);
-				ImageView img = (ImageView) v.findViewById(R.id.listpic);
+				TextView t = (TextView) viewCache.getTextView();
+				final ImageView img = (ImageView) viewCache.getImageView();
 
 				t.setText(l.getTitle());
-				InputStream is;
-				try {
-					is = (InputStream) fetch(l.getThumbnailURL());
 
-					Drawable d = Drawable.createFromStream(is, "src");
-					img.setImageDrawable(d);
-					img.setOnClickListener(new OnClickListener() {
-						public void onClick(View v) {
-							startActivity(new Intent(Intent.ACTION_VIEW, Uri
-									.parse(l.getVideoURL())));
-						}
-					});
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				Drawable cachedImage = asyncImageLoader.loadDrawable(
+						l.getThumbnailURL(), new ImageCallback() {
+							public void imageLoaded(Drawable imageDrawable,
+									String imageUrl) {
+								if (img != null) {
+									img.setImageDrawable(imageDrawable);
+								}
+							}
+						});
+				img.setImageDrawable(cachedImage);
 			}
 			return v;
 		}

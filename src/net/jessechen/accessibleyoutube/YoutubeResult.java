@@ -11,10 +11,10 @@
  ******************************************************************************/
 package net.jessechen.accessibleyoutube;
 
-public class SearchResult {
+public class YoutubeResult {
 	private String title, videoURL, thumbnailUrl, description, username, summary, feedURL;
 
-	public SearchResult(String titleString, String id, String thumbnailUrl,
+	public YoutubeResult(String titleString, String id, String thumbnailUrl,
 			String description, String username) {
 		title = titleString;
 		videoURL = "http://www.youtube.com/watch?v=" + id;
@@ -23,7 +23,7 @@ public class SearchResult {
 		this.username = username;
 	}
 
-	public SearchResult(String titleString, String summ, String feed) {
+	public YoutubeResult(String titleString, String summ, String feed) {
 		title = titleString;
 		summary = summ;
 		feedURL = feed;

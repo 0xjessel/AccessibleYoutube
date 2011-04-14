@@ -11,7 +11,10 @@
  ******************************************************************************/
 package net.jessechen.accessibleyoutube;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -52,7 +55,7 @@ public class Result extends Activity {
 			title.setText(titleString);
 
 			ImageView image = (ImageView) findViewById(R.id.thumbnail);
-			InputStream is = (InputStream) QueryResults.fetch(thumbnailUrl);
+			InputStream is = (InputStream) fetch(thumbnailUrl);
 			Drawable d = Drawable.createFromStream(is, "src");
 			image.setImageDrawable(d);
 			image.setOnClickListener(new OnClickListener() {
@@ -101,6 +104,13 @@ public class Result extends Activity {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+	}
+
+	private static Object fetch(String address) throws IOException,
+			MalformedURLException {
+		URL url = new URL(address);
+		Object content = url.getContent();
+		return content;
 	}
 
 }

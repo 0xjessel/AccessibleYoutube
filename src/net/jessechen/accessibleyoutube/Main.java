@@ -12,10 +12,12 @@
 package net.jessechen.accessibleyoutube;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -32,23 +34,28 @@ public class Main extends Activity {
 
 		queryText = (EditText) findViewById(R.id.searchtext);
 
-		Button queryButton = (Button) findViewById(R.id.querybutton);
+		final Button queryButton = (Button) findViewById(R.id.querybutton);
 		queryButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				intent = new Intent(Main.this, QueryResults.class);
 				intent.putExtra("query", queryText.getText().toString());
 				startActivity(intent);
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(queryButton.getWindowToken(), 0);
 			}
+			
 		});
 
-		Button channelButton = (Button) findViewById(R.id.channelbutton);
+		final Button channelButton = (Button) findViewById(R.id.channelbutton);
 		channelButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				intent = new Intent(Main.this, ChannelResults.class);
 				intent.putExtra("query", queryText.getText().toString());
 				startActivity(intent);
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(channelButton.getWindowToken(), 0);
 			}
 		});
 	}
