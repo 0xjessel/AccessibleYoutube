@@ -20,6 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_marginRight="6dip"
+        android:src="#FFFFFF"
     />             
 	<TextView 
 		android:id="@+id/text"
