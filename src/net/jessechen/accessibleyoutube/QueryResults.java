@@ -213,7 +213,6 @@ public class QueryResults extends Activity {
 	private class mAdapter extends ArrayAdapter<ListItem> {
 		private ArrayList<ListItem> items;
 		private AsyncImageLoader asyncImageLoader;
-		private int i = 0;
 
 		public mAdapter(Context context, int textViewResourceId,
 				ArrayList<ListItem> items) {
@@ -241,18 +240,21 @@ public class QueryResults extends Activity {
 				TextView t = (TextView) viewCache.getTextView();
 				ImageView img = (ImageView) viewCache.getImageView();
 				final String thumbURL = l.getThumbnailURL();
-				
+
+				img.setImageResource(R.drawable.placeholder);
 				t.setText(l.getTitle());
-				
+
 				img.setTag(thumbURL);
 
-				Drawable cachedImage = asyncImageLoader.loadDrawable(
-						thumbURL, new ImageCallback() {
+				Drawable cachedImage = asyncImageLoader.loadDrawable(thumbURL,
+						new ImageCallback() {
 							public void imageLoaded(Drawable imageDrawable,
 									String imageUrl) {
-								ImageView imageViewByTag = (ImageView) lv.findViewWithTag(thumbURL);
+								ImageView imageViewByTag = (ImageView) lv
+										.findViewWithTag(thumbURL);
 								if (imageViewByTag != null) {
-									imageViewByTag.setImageDrawable(imageDrawable);
+									imageViewByTag
+											.setImageDrawable(imageDrawable);
 								}
 							}
 						});
